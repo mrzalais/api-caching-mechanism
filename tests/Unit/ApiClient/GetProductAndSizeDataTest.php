@@ -5,7 +5,8 @@ declare(strict_types=1);
 namespace Tests\Unit\ApiClient;
 
 use App\ApiClient;
-use App\Services\DataFormattingService;
+use App\Services\ProductFormattingService;
+use App\Services\SizeTableFormattingService;
 use GuzzleHttp\Client;
 use GuzzleHttp\Psr7\Response;
 use PHPUnit\Framework\TestCase;
@@ -26,7 +27,7 @@ class GetProductAndSizeDataTest extends TestCase
             ->willReturn($response);
 
         $apiClient = $this->getMockBuilder(ApiClient::class)
-            ->setConstructorArgs([$mockGuzzleClient, new DataFormattingService()])
+            ->setConstructorArgs([$mockGuzzleClient, new ProductFormattingService(), new SizeTableFormattingService()])
             ->onlyMethods(['getProductData', 'getSizeTableData'])
             ->getMock();
 

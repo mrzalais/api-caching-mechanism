@@ -4,15 +4,15 @@ declare(strict_types=1);
 
 namespace Tests\Unit\DataFormattingService;
 
-use App\Services\DataFormattingService;
+use App\Services\SizeTableFormattingService;
 use PHPUnit\Framework\TestCase;
 
 class FormatSizeTableTest extends TestCase
 {
     public function test_it_returns_correctly_formatted_data_based_on_provided_size(): void
     {
-        $dataFormattingService = new DataFormattingService();
-        $formattedData = $dataFormattingService->formatSizeTables($this->getExampleSizeTableData(), 'S');
+        $sizeTableFormattingService = new SizeTableFormattingService();
+        $formattedData = $sizeTableFormattingService->formatSizeTables($this->getExampleSizeTableData(), 'S');
 
         $this->assertEquals($this->getExpectedData(), $formattedData);
     }

@@ -4,15 +4,15 @@ declare(strict_types=1);
 
 namespace Tests\Unit\DataFormattingService;
 
-use App\Services\DataFormattingService;
+use App\Services\ProductFormattingService;
 use PHPUnit\Framework\TestCase;
 
 class FormatProductTest extends TestCase
 {
     public function test_it_returns_formatted_product_data(): void
     {
-        $dataFormattingService = new DataFormattingService();
-        $formattedData = $dataFormattingService->formatProduct($this->getExampleProductData());
+        $productFormattingService = new ProductFormattingService();
+        $formattedData = $productFormattingService->formatProduct($this->getExampleProductData());
 
         $this->assertEquals(
             [

@@ -5,7 +5,8 @@ declare(strict_types=1);
 namespace Tests\Unit\ApiClient;
 
 use App\ApiClient;
-use App\Services\DataFormattingService;
+use App\Services\ProductFormattingService;
+use App\Services\SizeTableFormattingService;
 use GuzzleHttp\Client;
 use GuzzleHttp\Psr7\Response;
 use PHPUnit\Framework\TestCase;
@@ -26,7 +27,7 @@ class GetSizeTableDataTest extends TestCase
             ->with("products/{$productId}/sizes")
             ->willReturn($response);
 
-        $formattingServiceMock = $this->createMock(DataFormattingService::class);
+        $formattingServiceMock = $this->createMock(SizeTableFormattingService::class);
 
         $formattingServiceMock->expects($this->once())
             ->method('formatSizeTables')
@@ -34,7 +35,7 @@ class GetSizeTableDataTest extends TestCase
 
         $apiClient = $this->getMockBuilder(ApiClient::class)
             ->onlyMethods([])
-            ->setConstructorArgs([$mockGuzzleClient, $formattingServiceMock])
+            ->setConstructorArgs([$mockGuzzleClient, new ProductFormattingService(), $formattingServiceMock])
             ->getMock();
 
         $productData = $apiClient->getSizeTableData($productId, $size);
