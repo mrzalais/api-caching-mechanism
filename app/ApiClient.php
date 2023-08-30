@@ -4,14 +4,16 @@ declare(strict_types=1);
 
 namespace App;
 
-use App\Services\DataFormattingService;
+use App\Services\SizeTableFormattingService;
+use App\Services\ProductFormattingService;
 use GuzzleHttp\Client;
 
 class ApiClient
 {
     public function __construct(
         protected readonly Client $client,
-        protected readonly DataFormattingService $dataFormattingService
+        protected readonly ProductFormattingService $productDataFormattingService,
+        protected readonly SizeTableFormattingService $sizeTableFormattingService,
     ) {
     }
 
@@ -31,7 +33,7 @@ class ApiClient
         $response = $this->client->get("products/{$productId}");
         $data = json_decode($response->getBody()->getContents(), true);
 
-        return $this->dataFormattingService->formatProduct($data);
+        return $this->productDataFormattingService->formatProduct($data);
     }
 
     public function getSizeTableData(int $productId, string $size): array
@@ -39,6 +41,6 @@ class ApiClient
         $response = $this->client->get("products/{$productId}/sizes");
         $data = json_decode($response->getBody()->getContents(), true);
 
-        return $this->dataFormattingService->formatSizeTables($data, $size);
+        return $this->sizeTableFormattingService->formatSizeTables($data, $size);
     }
 }

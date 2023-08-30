@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace App\Services;
 
-class DataFormattingService
+class SizeTableFormattingService
 {
     public function formatSizeTables(array $data, string $size): array
     {
@@ -38,16 +38,5 @@ class DataFormattingService
         }
 
         return $formattedSizeTables;
-    }
-
-    public function formatProduct(array $data): array
-    {
-        $product = $data['result']['product'];
-
-        return [
-            'id' => $product['id'],
-            'title' => $product['title'],
-            'description' => $product['description'],
-        ];
     }
 }
