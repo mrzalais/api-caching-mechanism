@@ -1,4 +1,4 @@
-# Printful API caching mechanism
+# API caching mechanism
 
 ## Installation
 ``docker compose up -d --build``
