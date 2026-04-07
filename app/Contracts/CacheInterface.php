@@ -11,9 +11,9 @@ interface CacheInterface
      * @param string $key
      * @param mixed $value
      * @param int $duration Duration in seconds
-     * @return mixed
+     * @return void
      */
-    public function set(string $key, $value, int $duration);
+    public function set(string $key, mixed $value, int $duration): void;
 
     /**
      * Retrieve stored item.
@@ -23,5 +23,5 @@ interface CacheInterface
      * @param string $key
      * @return mixed|null
      */
-    public function get(string $key);
+    public function get(string $key): mixed;
 }

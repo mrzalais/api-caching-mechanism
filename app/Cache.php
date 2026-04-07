@@ -18,7 +18,7 @@ class Cache implements CacheInterface
         }
     }
 
-    public function set(string $key, $value, int $duration)
+    public function set(string $key, mixed $value, int $duration): void
     {
         $cacheFile = $this->getCacheFilePath($key);
         $data = [
@@ -28,7 +28,7 @@ class Cache implements CacheInterface
         file_put_contents($cacheFile, json_encode($data));
     }
 
-    public function get(string $key)
+    public function get(string $key): mixed
     {
         $cacheFileName = $this->getCacheFilePath($key);
 

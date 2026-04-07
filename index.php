@@ -22,15 +22,15 @@ $productId = 438;
 $size = Size::Large->value;
 $cacheKey = "product_{$productId}_size_{$size}";
 
-$cachedData = $cache->get($cacheKey);
+$productAndSizeData = $cache->get($cacheKey);
 
-if ($cachedData !== null) {
-    $productAndSizeData = $cachedData;
-} else {
+if ($productAndSizeData === null) {
     $productAndSizeData = $apiClient->getProductAndSizeData($productId, $size);
-
-    // Store data in cache for 5 minutes
-    $cache->set($cacheKey, $productAndSizeData, 300);
+    $cache->set(
+        key: $cacheKey,
+        value: $productAndSizeData,
+        duration: 300 // In seconds
+    );
 }
 
 print_r($productAndSizeData);

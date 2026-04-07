@@ -6,17 +6,22 @@ namespace App;
 
 use App\Services\SizeTableFormattingService;
 use App\Services\ProductFormattingService;
-use GuzzleHttp\Client;
+use GuzzleHttp\Psr7\Request;
+use Psr\Http\Client\ClientExceptionInterface;
+use Psr\Http\Client\ClientInterface;
 
 class ApiClient
 {
     public function __construct(
-        protected readonly Client $client,
+        protected readonly ClientInterface $client,
         protected readonly ProductFormattingService $productDataFormattingService,
         protected readonly SizeTableFormattingService $sizeTableFormattingService,
     ) {
     }
 
+    /**
+     * @throws ClientExceptionInterface
+     */
     public function getProductAndSizeData(int $productId, string $size): array
     {
         $productData = $this->getProductData($productId);
@@ -28,17 +33,25 @@ class ApiClient
         ];
     }
 
+    /**
+     * @throws ClientExceptionInterface
+     */
     public function getProductData(int $productId): array
     {
-        $response = $this->client->get("products/{$productId}");
+        $request = new Request('GET', "products/{$productId}");
+        $response = $this->client->sendRequest($request);
         $data = json_decode($response->getBody()->getContents(), true);
 
         return $this->productDataFormattingService->formatProduct($data);
     }
 
+    /**
+     * @throws ClientExceptionInterface
+     */
     public function getSizeTableData(int $productId, string $size): array
     {
-        $response = $this->client->get("products/{$productId}/sizes");
+        $request = new Request('GET', "products/{$productId}/sizes");
+        $response = $this->client->sendRequest($request);
         $data = json_decode($response->getBody()->getContents(), true);
 
         return $this->sizeTableFormattingService->formatSizeTables($data, $size);

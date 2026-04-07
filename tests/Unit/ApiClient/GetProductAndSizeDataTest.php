@@ -7,9 +7,10 @@ namespace Tests\Unit\ApiClient;
 use App\ApiClient;
 use App\Services\ProductFormattingService;
 use App\Services\SizeTableFormattingService;
-use GuzzleHttp\Client;
+use GuzzleHttp\Psr7\Request;
 use GuzzleHttp\Psr7\Response;
 use PHPUnit\Framework\TestCase;
+use Psr\Http\Client\ClientInterface;
 
 class GetProductAndSizeDataTest extends TestCase
 {
@@ -18,16 +19,18 @@ class GetProductAndSizeDataTest extends TestCase
         $productId = 438;
         $size = 'M';
 
-        $mockGuzzleClient = $this->createMock(Client::class);
+        $mockClient = $this->createMock(ClientInterface::class);
 
         $response = new Response(status: 200, body: json_encode([]));
 
-        $mockGuzzleClient->method('get')
-            ->with("products/{$productId}")
+        $mockClient->method('sendRequest')
+            ->with($this->callback(function (Request $request) use ($productId) {
+                return $request->getMethod() === 'GET' && (string)$request->getUri() === "products/{$productId}";
+            }))
             ->willReturn($response);
 
         $apiClient = $this->getMockBuilder(ApiClient::class)
-            ->setConstructorArgs([$mockGuzzleClient, new ProductFormattingService(), new SizeTableFormattingService()])
+            ->setConstructorArgs([$mockClient, new ProductFormattingService(), new SizeTableFormattingService()])
             ->onlyMethods(['getProductData', 'getSizeTableData'])
             ->getMock();
 
